@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "gameId": "y64yojq1w74x",
+  "title": "無題のゲーム",
+  "versionId": "3e9baa68-0d1f-4b25-8003-1b32666ed6f8",
+  "snapshotAt": "2026-08-08T18:20:39.110Z",
+  "playUrl": "https://gcn-play.com/play/y64yojq1w74x",
+  "files": [
+    {
+      "path": "README.md",
+      "mime": "text/markdown; charset=utf-8",
+      "bytes": 1868,
+      "sha256": "80eaf032d6876e6aafef5e5f439a9a860bdd54f468866179428d2daef122a33e"
+    },
+    {
+      "path": "index.html",
+      "mime": "text/html; charset=utf-8",
+      "bytes": 3443800,
+      "sha256": "453e425a1b89d16e68d2672acaba134cda6e494e4804890f9df703ff82ec9149"
+    },
+    {
+      "path": "assets/images/bg_main.webp",
+      "mime": "image/webp",
+      "bytes": 93946,
+      "sha256": "81713a1253eb5f0989921d35b2f49cf1b817a75bab5f45571078984bf370e216"
+    },
+    {
+      "path": "assets/music/bgm_main.wav",
+      "mime": "audio/wav",
+      "bytes": 1323044,
+      "sha256": "d25e9355fbc5cb52bc4d848cbe675ad9f57177106372533f5366f45a45b0dc0b"
+    },
+    {
+      "path": "assets/sfx/se_cheer.wav",
+      "mime": "audio/wav",
+      "bytes": 352878,
+      "sha256": "a873b93f274e15b41e80f020e6b12e39116fcda91e56740bf025370b7e5dd5d1"
+    },
+    {
+      "path": "assets/sfx/se_fail.wav",
+      "mime": "audio/wav",
+      "bytes": 352878,
+      "sha256": "cabdbb96d668952253f0fedcc280b8b77450955a0f38de0f7f29e8cb644a9f37"
+    },
+    {
+      "path": "assets/sfx/se_gate.wav",
+      "mime": "audio/wav",
+      "bytes": 176478,
+      "sha256": "9c4b1cc1b48c750b8cfb7f373003f5db306782464cce28f02531ddfb31f7ecb9"
+    },
+    {
+      "path": "assets/sfx/se_punch.wav",
+      "mime": "audio/wav",
+      "bytes": 176478,
+      "sha256": "7b85d08b2e7750016d5c9aead319d7dc2f59160f00e7c45bd1ae57333d71dc92"
+    },
+    {
+      "path": "assets/sfx/vo_clear.mp3",
+      "mime": "audio/mpeg",
+      "bytes": 18485,
+      "sha256": "a18b0db9ae8cd3072793a8a6c854286a8cf85970527077cee90fc7e3163f8478"
+    },
+    {
+      "path": "assets/sfx/vo_lose.mp3",
+      "mime": "audio/mpeg",
+      "bytes": 24251,
+      "sha256": "c328426747ae4c8ab899643ff5bc42f60b113ade3c0a0759d8ccad4e77b015e7"
+    },
+    {
+      "path": "assets/sfx/vo_start.mp3",
+      "mime": "audio/mpeg",
+      "bytes": 20215,
+      "sha256": "2ee278f932d8b34e819e41b7780f8b82fedb9e3cb100580001aea98cfb69221b"
+    }
+  ],
+  "skipped": []
+}
