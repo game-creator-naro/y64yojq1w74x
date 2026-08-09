@@ -572,7 +572,7 @@ GCN.onInit=function(s){
 /* ---------- assets (optional, with fallbacks) ---------- */
 var AU={},bgImg=null;
 function setupAssets(){
-  try{var m=GCN.assets.music.bgm_main;if(m){AU.bgm=new Audio(m);AU.bgm.loop=true;}}catch(e){}
+  try{var m=GCN.assets.music.bgm_main;if(m){AU.bgm=new Audio(m);AU.bgm.loop=true;AU.bgm.volume=0.45;}}catch(e){}
   try{var u1=GCN.assets.sfx.se_punch;if(u1)AU.punch=new Audio(u1);}catch(e){}
   try{var u2=GCN.assets.sfx.se_gate;if(u2)AU.gate=new Audio(u2);}catch(e){}
   try{var u3=GCN.assets.sfx.se_cheer;if(u3)AU.cheer=new Audio(u3);}catch(e){}
@@ -582,22 +582,31 @@ function setupAssets(){
   try{var u7=GCN.assets.sfx.vo_lose;if(u7)AU.vo_lose=new Audio(u7);}catch(e){}
   try{var bi=GCN.assets.images.bg_main;if(bi){bgImg=new Image();bgImg.onload=function(){bgImg.ready=true;};bgImg.src=bi;}}catch(e){}
 }
-function playA(k){try{var a=AU[k];if(!a)return false;var c=a.cloneNode();var pr=c.play();if(pr&&pr.catch)pr.catch(function(){});return true;}catch(e){return false;}}
+function playA(k){
+  try{var a=AU[k];if(!a)return false;var c=a.cloneNode();
+  c.volume=(k.indexOf("vo_")===0)?0.7:0.4;
+  var pr=c.play();if(pr&&pr.catch)pr.catch(function(){});return true;}catch(e){return false;}
+}
 function bgmStart(){try{var a=AU.bgm;if(!a)return;var pr=a.play();if(pr&&pr.catch)pr.catch(function(){});}catch(e){}}
 
-/* ---------- audio (procedural fallback) ---------- */
-var ac=null,AC=window.AudioContext||window.webkitAudioContext;
+/* ---------- audio (procedural fallback, quiet master) ---------- */
+var ac=null,master=null,AC=window.AudioContext||window.webkitAudioContext;
 function unlockAudio(){
-  try{if(!ac&&AC)ac=new AC();if(ac&&ac.state==="suspended"){var p=ac.resume();if(p&&p.catch)p.catch(function(){});}}catch(err){ac=null;}
+  try{
+    if(!ac&&AC)ac=new AC();
+    if(ac&&!master){master=ac.createGain();master.gain.value=0.38;master.connect(ac.destination);}
+    if(ac&&ac.state==="suspended"){var p=ac.resume();if(p&&p.catch)p.catch(function(){});}
+  }catch(err){ac=null;}
   bgmStart();
 }
+function audioDest(){return master?master:ac.destination;}
 function tone(f0,f1,dur,type,vol,delay){
   if(!ac)return;
   try{var n=ac.currentTime+(delay||0),o=ac.createOscillator(),g=ac.createGain();
   o.type=type||"sine";o.frequency.setValueAtTime(f0,n);
   if(f1)o.frequency.exponentialRampToValueAtTime(Math.max(30,f1),n+dur);
   g.gain.setValueAtTime(vol||0.15,n);g.gain.exponentialRampToValueAtTime(0.001,n+dur);
-  o.connect(g);g.connect(ac.destination);o.start(n);o.stop(n+dur+0.03);}catch(e){}
+  o.connect(g);g.connect(audioDest());o.start(n);o.stop(n+dur+0.03);}catch(e){}
 }
 function noiseBurst(dur,vol,delay){
   if(!ac)return;
@@ -605,14 +614,14 @@ function noiseBurst(dur,vol,delay){
   for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*(1-i/len);
   var src=ac.createBufferSource();src.buffer=buf;var g=ac.createGain();
   g.gain.setValueAtTime(vol,n0);g.gain.exponentialRampToValueAtTime(0.001,n0+dur);
-  src.connect(g);g.connect(ac.destination);src.start(n0);}catch(e){}
+  src.connect(g);g.connect(audioDest());src.start(n0);}catch(e){}
 }
 function sfxGateGood(){if(playA("gate"))return;tone(620,0,0.09,"square",0.10);tone(930,0,0.13,"square",0.10,0.07);}
 function sfxGateBad(){tone(210,80,0.28,"sawtooth",0.16);}
-function sfxFight(){playA("punch");noiseBurst(0.18,0.22);tone(130,50,0.2,"triangle",0.2);}
-function sfxTick(){tone(520,320,0.05,"square",0.05);}
-function sfxClear(){playA("cheer");playA("vo_clear");tone(523,0,0.12,"square",0.11);tone(659,0,0.12,"square",0.11,0.1);tone(784,0,0.12,"square",0.11,0.2);tone(1046,0,0.3,"square",0.12,0.3);}
-function sfxOver(){playA("vo_lose");playA("fail");tone(330,0,0.18,"sawtooth",0.11);tone(220,0,0.2,"sawtooth",0.11,0.16);tone(150,0,0.4,"sawtooth",0.12,0.34);}
+function sfxFight(){playA("punch");noiseBurst(0.18,0.16);tone(130,50,0.2,"triangle",0.14);}
+function sfxTick(){tone(520,320,0.05,"square",0.04);}
+function sfxClear(){playA("cheer");playA("vo_clear");tone(523,0,0.12,"square",0.09);tone(659,0,0.12,"square",0.09,0.1);tone(784,0,0.12,"square",0.09,0.2);tone(1046,0,0.3,"square",0.1,0.3);}
+function sfxOver(){playA("vo_lose");playA("fail");tone(330,0,0.18,"sawtooth",0.09);tone(220,0,0.2,"sawtooth",0.09,0.16);tone(150,0,0.4,"sawtooth",0.1,0.34);}
 
 /* ---------- helpers ---------- */
 function clamp(v,a,b){return v<a?a:v>b?b:v;}
@@ -742,9 +751,9 @@ function updateRun(dt){
   travAcc+=speed*dt;
   while(travAcc>=3){score++;travAcc-=3;try{GCN.score(score);}catch(err){}}
   dustAcc+=dt;
-  if(dustAcc>0.07){dustAcc=0;var dp=proj(playerX+(Math.random()-0.5)*1.4,0,playerZ-0.5-Math.random());
+  if(dustAcc>0.07){dustAcc=0;var dp=proj(playerX+(Math.random()-0.5)*1.6,0,playerZ-0.5-Math.random());
     if(dp)ps.push({x:dp.x,y:dp.y,vx:(Math.random()-0.5)*30,vy:-30-Math.random()*40,g:-40,l:0.5,col:"rgba(255,255,255,0.5)",r:2.5+Math.random()*2.5,add:false});}
-  if(!bossWarned&&levelLen-playerZ<55){bossWarned=true;addFloat("⚠ ボス出現 ⚠",W/2,H*0.35,"#ff5566",34);tone(180,120,0.3,"sawtooth",0.12);}
+  if(!bossWarned&&levelLen-playerZ<55){bossWarned=true;addFloat("⚠ ボス出現 ⚠",W/2,H*0.35,"#ff5566",34);tone(180,120,0.3,"sawtooth",0.1);}
   for(var i=0;i<events.length;i++){var e=events[i];
     if(e.type==="gate"){
       if(!e.done&&prevZ<e.z&&playerZ>=e.z){e.done=true;onGate(e);if(mode!=="run")return;}
@@ -776,7 +785,7 @@ function updateRun(dt){
 /* ---------- drawing ---------- */
 function rrect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
 function drawSoldier(sx,sy0,p,col,scale,bob){
-  var h=0.95*VSpx(p)*scale;if(h<2.5)return;
+  var h=1.12*VSpx(p)*scale;if(h<2.5)return;
   var top=sy0-h+bob;
   ctx.fillStyle="rgba(0,0,0,0.22)";
   ctx.beginPath();ctx.ellipse(sx,sy0,h*0.3,h*0.09,0,0,6.28);ctx.fill();
@@ -793,7 +802,7 @@ function drawSoldier(sx,sy0,p,col,scale,bob){
 function drawCrowd(cx,cz,n,col,scale,seed,labelCol,isPlayer,crown){
   var pz=cz-camZ;if(pz<0.6||pz>90)return;
   var drawn=Math.min(n,pz>40?14:pz>22?30:60);
-  var spread=Math.min(1.85,0.45+Math.sqrt(n)*0.13)*(scale>1?1.15:1);
+  var spread=Math.min(2.0,0.55+Math.sqrt(n)*0.15)*(scale>1?1.15:1);
   var arr=[],i,a,rad,ox,oz,g;
   for(i=0;i<drawn;i++){a=i*2.39996+seed;rad=spread*Math.sqrt((i+0.5)/drawn);
     ox=Math.cos(a)*rad;oz=Math.sin(a)*rad*0.72;
@@ -802,7 +811,7 @@ function drawCrowd(cx,cz,n,col,scale,seed,labelCol,isPlayer,crown){
   arr.sort(function(q,w){return w.oz-q.oz;});
   var minY=1e9,bobAmp=mode==="clear"?2.2:1;
   for(i=0;i<arr.length;i++){var s=arr[i];
-    var hh=0.95*VSpx(s.p)*scale;
+    var hh=1.12*VSpx(s.p)*scale;
     var bob=Math.sin(tsec*9+s.i*1.7)*hh*0.05*bobAmp;
     drawSoldier(s.x,s.y,s.p,col,scale,bob);
     var tp=s.y-hh+bob;if(tp<minY)minY=tp;}

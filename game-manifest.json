@@ -2,8 +2,8 @@
   "schema": 1,
   "gameId": "y64yojq1w74x",
   "title": "兵士増やすやつ",
-  "versionId": "3e9baa68-0d1f-4b25-8003-1b32666ed6f8",
-  "snapshotAt": "2026-08-09T04:51:06.465Z",
+  "versionId": "09c717f3-86c1-401b-af6b-7c45e7ccf17c",
+  "snapshotAt": "2026-08-09T08:54:37.361Z",
   "playUrl": "https://gcn-play.com/play/y64yojq1w74x",
   "files": [
     {
@@ -15,8 +15,8 @@
     {
       "path": "index.html",
       "mime": "text/html; charset=utf-8",
-      "bytes": 3443800,
-      "sha256": "453e425a1b89d16e68d2672acaba134cda6e494e4804890f9df703ff82ec9149"
+      "bytes": 3444057,
+      "sha256": "165fe1c5936569f31bb49825e71a6cf24a46ef8ee5252c48059805f789be75f5"
     },
     {
       "path": "assets/images/bg_main.webp",
