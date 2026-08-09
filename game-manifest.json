@@ -1,16 +1,16 @@
 {
   "schema": 1,
   "gameId": "y64yojq1w74x",
-  "title": "無題のゲーム",
+  "title": "兵士増やすやつ",
   "versionId": "3e9baa68-0d1f-4b25-8003-1b32666ed6f8",
-  "snapshotAt": "2026-08-08T18:20:39.110Z",
+  "snapshotAt": "2026-08-09T04:51:06.465Z",
   "playUrl": "https://gcn-play.com/play/y64yojq1w74x",
   "files": [
     {
       "path": "README.md",
       "mime": "text/markdown; charset=utf-8",
-      "bytes": 1868,
-      "sha256": "80eaf032d6876e6aafef5e5f439a9a860bdd54f468866179428d2daef122a33e"
+      "bytes": 1871,
+      "sha256": "efc1fdf1d358a5a3ec1f2b17c7716b8aa42855f7fdf1b064e521c32795a4b0f6"
     },
     {
       "path": "index.html",
